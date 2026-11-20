@@ -1,0 +1,5 @@
+Split,Source_Clusters,Images,Image_Share_Pct,Annotated_Instances,Avg_Instances_Per_Img,Background_Only_Imgs
+Train,2054,2951,69.95,2950,1.0,198
+Val,439,633,15.0,623,0.984,44
+Test,453,635,15.05,612,0.964,46
+Total,2946,4219,100.0,4185,0.992,288
