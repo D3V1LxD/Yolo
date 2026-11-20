@@ -30,7 +30,7 @@ To resolve discrepancies between image count, bounding-box instances, and negati
 | **External Real Underwater Controls (DeepFish)** | 10 habitats (20 clips) | 400 | Held-out | 0 (*non-Hilsa / empty*) | 0.000 | 400 (200 non-Hilsa fish + 200 empty) |
 
 ### Reconciliation with Initial Submission Counts
-* The initial manuscript reported **3,949 fish-bearing/split images** with **3,339 training bounding-box instances** and **846 validation instances** (`3,339 + 846 = 4,185` total annotated *T. ilisha* instances).
+* The initial manuscript reported **3,949 split images** with **3,339 training bounding-box instances** and **846 validation instances** (`3,339 + 846 = 4,185` total annotated *T. ilisha* instances).
 * The audited repository contains **4,219 total images**, comprising **3,931 fish-bearing images** (`4,185` total annotated instances) plus **288 background-only negative frames** (`0` annotated fish boxes) retained to penalize background false positives.
 
 ---
@@ -39,10 +39,10 @@ To resolve discrepancies between image count, bounding-box instances, and negati
 
 | Component | File Pattern / Directory | Original Source & Attribution | License | Redistribution Status in This Repo |
 | :--- | :--- | :--- | :--- | :--- |
-| **A. Terrestrial *T. ilisha* Photographs** | `Ilish*.jpg.rf.*`, raw terrestrial frames | **[FILL IN: e.g., Original post-harvest market photography by author AND/OR exact Roboflow Universe / Kaggle dataset name, author, and URL]** | **[FILL IN: e.g., CC BY 4.0 / CC0 1.0]** | **[FILL IN: Redistributed under stated license OR labels + download links only]** |
-| **B. Estuarine / Riverine Background Images** | Source backgrounds used to composite `synthetic_hilsa_*.jpg` | **[FILL IN: e.g., Author-captured river imagery / Wikimedia Commons / Pexels / Unsplash with exact URLs]** | **[FILL IN: e.g., CC BY 4.0 / CC0 / Royalty-Free]** | **[FILL IN: Included with attribution OR generation script provided]** |
+| **A. Terrestrial *T. ilisha* Photographs** | `Ilish*.jpg.rf.*`, raw terrestrial frames | **Roboflow 100 — *Fish Market* Dataset (`fish-market-ggjso`)** (*Ilish* class subset extracted from the 18,731-image RF100 benchmark; Ciaglia et al., 2022): `https://universe.roboflow.com/roboflow-100/fish-market-ggjso` | **CC BY 4.0** | Redistributed and adapted into synthetic composites under CC BY 4.0 with attribution |
+| **B. Estuarine / Riverine Background Images** | Source backgrounds used to composite `synthetic_hilsa_*.jpg` | **[FILL IN: Exact source platform/author and URLs, e.g., Wikimedia Commons / Pexels / Unsplash / author-captured river frames]** | **[FILL IN: e.g., CC BY 4.0 / CC0 / Pexels License]** | **[FILL IN: Included with attribution OR generation script provided]** |
 | **C. Synthetic Turbid Composites & Beer–Lambert Degradation Tiers** | `synthetic_hilsa_*.jpg`, `module1_turbidity_ablation/` | Generated programmatically from Components A & B using background removal, affine transforms, alpha blending, and Jaffe–McGlamery optical attenuation (`ablation_new.py`) | **CC BY 4.0** (derivative data); **MIT** (generation scripts) | Fully reproducible via repository scripts; YOLO annotations redistributed under CC BY 4.0 |
-| **D. External Real-World Underwater Negative Controls (DeepFish)** | `external_real_underwater_negatives/` (`non_hilsa_fish/`, `empty_murky_habitats/`) | DeepFish Dataset — Saleh et al. (2020), *Scientific Reports*, 10, 14671 (`https://doi.org/10.1038/s41598-020-71639-x`); streamed from official Hugging Face mirror (`Alzayats/DeepFish`) | **CC BY 4.0** | Exact frame-level manifest logged in `deepfish_provenance_manifest.csv`; reproducible via `fetch_deepfish_negatives.py` |
+| **D. External Real-World Underwater Negative Controls (DeepFish)** | `external_real_underwater_negatives/` (`non_hilsa_fish/`, `empty_murky_habitats/`) | DeepFish Dataset — Saleh et al. (2020), *Scientific Reports*, *10*, 14671 (`https://doi.org/10.1038/s41598-020-71639-x`); streamed from official Hugging Face mirror (`Alzayats/DeepFish`) | **CC BY 4.0** | Exact frame-level manifest logged in `deepfish_provenance_manifest.csv`; reproducible via `fetch_deepfish_negatives.py` |
 | **E. Pretrained Backbone Checkpoints & Framework** | `yolov5nu.pt`, `yolov8n.pt`, `yolov9s.pt` | Ultralytics YOLO (pretrained on MS COCO) | **AGPL-3.0** (Ultralytics library); **CC BY 4.0** (COCO annotations) | Downloaded automatically at runtime via `ultralytics`; not redistributed directly |
 
 ---
@@ -60,4 +60,5 @@ To prevent consecutive-frame pseudo-replication and ensure environmental diversi
 
 ## 5. Data Leakage Audit & Leak-Free Splitting Protocol
 
-Prior to final retraining, `audit_split_and_benchmark.py` audited all 4,219 images using a
+Prior to final retraining, `audit_split_and_benchmark.py` audited all 4,219 images using a dual-method leakage detector:
+1. **Filename Base-Stem Clustering:** Strips Roboflow hashes (`.rf.*
